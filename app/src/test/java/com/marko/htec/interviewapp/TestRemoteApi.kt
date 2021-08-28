@@ -7,22 +7,17 @@ import retrofit2.converter.gson.GsonConverterFactory
 /**
  * @author Created by Marko Mihajlovic on 28.8.2021.
  */
-object RemoteApi {
+object TestRemoteApi {
 
-    private val BASE_URL ="https://jsonplaceholder.typicode.com/"
-
-    private val okHttp by lazy {
-        OkHttpClient.Builder().build()
-    }
+    private val TEST_BASE_URL = "https://jsonplaceholder.typicode.com/"
 
     private val retrofit by lazy {
         Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .client(okHttp)
+            .baseUrl(TEST_BASE_URL)
+            .client(OkHttpClient.Builder().build())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
 
     fun <T> getService(clsOfService: Class<T>): T {
         return retrofit.create(clsOfService)

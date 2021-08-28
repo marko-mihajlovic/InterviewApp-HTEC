@@ -1,6 +1,5 @@
-package com.marko.htec.interviewapp.repository.user
+package com.marko.htec.interviewapp.data.user
 
-import com.marko.htec.interviewapp.model.User
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

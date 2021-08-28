@@ -3,8 +3,8 @@ package com.marko.htec.interviewapp.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.marko.htec.interviewapp.data.post.Post
 import com.marko.htec.interviewapp.databinding.RowPostBinding
-import com.marko.htec.interviewapp.model.Post
 
 /**
  * @author Created by Marko Mihajlovic on 28.8.2021.
@@ -15,15 +15,13 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.RowPost>() {
 
     fun updateList(postList: List<Post>?) {
         this.postList = postList ?: mutableListOf()
-
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowPost {
-        val rowNewsBinding: RowPostBinding = RowPostBinding.inflate(
-            LayoutInflater.from(parent.context), parent, false
+        return RowPost(
+            RowPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
-        return RowPost(rowNewsBinding)
     }
 
     override fun onBindViewHolder(rowPost: RowPost, position: Int) {

@@ -4,21 +4,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.PostsFragment">
+    tools:context=".ui.posts.PostsFragment">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshListLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+       >
 
-        tools:listitem="@layout/row_post"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:orientation="vertical"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
 
-        android:paddingVertical="24dp"
-        android:paddingHorizontal="16dp"
-        android:clipToPadding="false"
-        />
+            tools:listitem="@layout/row_post"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"
+
+            android:paddingVertical="24dp"
+            android:paddingHorizontal="16dp"
+            android:clipToPadding="false"
+            />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
 
 </FrameLayout>

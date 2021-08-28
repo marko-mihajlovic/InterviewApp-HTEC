@@ -1,6 +1,5 @@
-package com.marko.htec.interviewapp.repository.posts
+package com.marko.htec.interviewapp.data.post
 
-import com.marko.htec.interviewapp.model.Post
 import retrofit2.Response
 import retrofit2.http.GET
 
@@ -10,6 +9,6 @@ import retrofit2.http.GET
 interface PostsService {
 
     @GET("posts")
-    suspend fun getPosts(): Response<List<Post>>
+    suspend fun getPostResponse(): Response<List<Post>>
 
 }

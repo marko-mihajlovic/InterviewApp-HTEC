@@ -1,4 +1,4 @@
-package com.marko.htec.interviewapp.ui
+package com.marko.htec.interviewapp.ui.posts
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,15 +8,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.marko.htec.interviewapp.adapter.PostsAdapter
 import com.marko.htec.interviewapp.databinding.FragmentPostsBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * @author Created by Marko Mihajlovic on 28.8.2021.
  */
+@AndroidEntryPoint
 class PostsFragment : Fragment() {
 
     private lateinit var binding: FragmentPostsBinding
     private val viewModel: PostsViewModel by activityViewModels()
-    private var newsAdapter: PostsAdapter? = null
+    @Inject lateinit var postsAdapter: PostsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentPostsBinding.inflate(layoutInflater, container, false)
@@ -32,14 +35,18 @@ class PostsFragment : Fragment() {
     }
 
     private fun confListAndAdapter() {
-        newsAdapter = PostsAdapter()
-        binding.listView.adapter = newsAdapter
+        binding.listView.adapter = postsAdapter
     }
 
     private fun confViewModel() {
         viewModel.postList.observe(viewLifecycleOwner, {
-            newsAdapter?.updateList(it)
+            postsAdapter.updateList(it)
         })
+
+        binding.refreshListLayout.setOnRefreshListener {
+            viewModel.refresh(true)
+            binding.refreshListLayout.isRefreshing = false
+        }
     }
 
 

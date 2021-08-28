@@ -1,6 +1,6 @@
 package com.marko.htec.interviewapp
 
-import com.marko.htec.interviewapp.repository.PostsRepository
+import com.marko.htec.interviewapp.repository.posts.PostsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertNotNull
 import org.junit.Test

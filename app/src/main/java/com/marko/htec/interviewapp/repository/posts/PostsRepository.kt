@@ -1,6 +1,7 @@
-package com.marko.htec.interviewapp.repository
+package com.marko.htec.interviewapp.repository.posts
 
 import com.marko.htec.interviewapp.model.Post
+import com.marko.htec.interviewapp.repository.RemoteApi
 import retrofit2.Response
 
 /**

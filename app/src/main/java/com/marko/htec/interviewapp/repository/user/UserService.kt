@@ -1,4 +1,4 @@
-package com.marko.htec.interviewapp.repository
+package com.marko.htec.interviewapp.repository.user
 
 import com.marko.htec.interviewapp.model.User
 import retrofit2.Response

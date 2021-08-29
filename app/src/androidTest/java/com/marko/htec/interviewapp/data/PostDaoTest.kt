@@ -1,13 +1,13 @@
-package com.marko.htec.interviewapp
+package com.marko.htec.interviewapp.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
-import com.marko.htec.interviewapp.data.AppDatabase
-import com.marko.htec.interviewapp.data.post.Post
 import com.marko.htec.interviewapp.data.post.PostDao
+import com.marko.htec.interviewapp.util.testPostAlone
+import com.marko.htec.interviewapp.util.testPosts
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.hamcrest.Matchers.equalTo
@@ -25,10 +25,6 @@ class PostDaoTest {
 
     private lateinit var database: AppDatabase
     private lateinit var postDao: PostDao
-    private val postA = Post(1, 2, "title1", "body1")
-    private val postB = Post(2, 2, "title2", "body2")
-    private val postC = Post(3, 4, "title3", "body3")
-
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
@@ -42,7 +38,8 @@ class PostDaoTest {
     }
 
     private fun insertAll() = runBlocking {
-        postDao.insertAll(listOf(postA, postB, postC))
+        postDao.insertAll(testPosts)
+        postDao.insert(testPostAlone)
     }
 
     @After
@@ -50,17 +47,20 @@ class PostDaoTest {
         database.close()
     }
 
-    @Test fun testGetPlants() = runBlocking {
-        val plantList = postDao.getPosts().first()
-        assertThat(plantList.size, equalTo(3))
+    @Test
+    fun testGetPosts() = runBlocking {
+        val postList = postDao.getPosts().first()
+        assertThat(postList.size, equalTo(testPosts.size + 1)) // + 1 because of testPostAlone
 
-        assertThat(plantList[0], equalTo(postA))
-        assertThat(plantList[1], equalTo(postB))
-        assertThat(plantList[2], equalTo(postC))
+        assertThat(postList[0], equalTo(testPosts[0]))
+        assertThat(postList[1], equalTo(testPosts[1]))
+        assertThat(postList[2], equalTo(testPosts[2]))
     }
 
-    @Test fun testGetPlant() = runBlocking {
-        assertThat(postDao.getPost(postA.id).first(), equalTo(postA))
+
+    @Test
+    fun testGetPost() = runBlocking {
+        assertThat(postDao.getPost(testPostAlone.id).first(), equalTo(testPostAlone))
     }
 
 }

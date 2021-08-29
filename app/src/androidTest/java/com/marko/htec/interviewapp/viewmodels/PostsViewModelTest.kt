@@ -1,8 +1,9 @@
-package com.marko.htec.interviewapp
+package com.marko.htec.interviewapp.viewmodels
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.room.Room
+import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
 import com.marko.htec.interviewapp.data.AppDatabase
 import com.marko.htec.interviewapp.data.post.PostsRepository
@@ -14,6 +15,7 @@ import com.marko.htec.interviewapp.util.runBlockingTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -25,7 +27,7 @@ import javax.inject.Inject
 /**
  * @author Created by Marko Mihajlovic on 28.8.2021.
  */
-
+@Suppress("BlockingMethodInNonBlockingContext")
 @ExperimentalCoroutinesApi
 @HiltAndroidTest
 class PostsViewModelTest {
@@ -60,13 +62,12 @@ class PostsViewModelTest {
         appDatabase.close()
     }
 
-    @Suppress("BlockingMethodInNonBlockingContext")
-    @ExperimentalCoroutinesApi
     @Test
     fun testPostListSize() = coroutineRule.runBlockingTest {
-        val size = getValue(viewModel.postList).size
+        val size = getValue(viewModel.postList)?.size
         logMessage("postListSize: $size")
-        assert(size == 100)
+
+        assertThat(size, equalTo(100))
     }
 
 }

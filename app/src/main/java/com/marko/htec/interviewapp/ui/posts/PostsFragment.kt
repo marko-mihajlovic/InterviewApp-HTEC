@@ -44,7 +44,7 @@ class PostsFragment : Fragment() {
         })
 
         binding.refreshListLayout.setOnRefreshListener {
-            viewModel.refresh(true)
+            viewModel.refresh()
             binding.refreshListLayout.isRefreshing = false
         }
     }

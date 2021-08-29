@@ -15,7 +15,7 @@ class FetchPostsTest{
 
     @Test
     fun fetchPosts() = runBlocking{
-        val posts = postsService.getPostResponse().body()
+        val posts = postsService.getPostsResponse().body()
         assertNotNull(posts)
 
         for (task in posts!!) {

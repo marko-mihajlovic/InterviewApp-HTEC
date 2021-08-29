@@ -2,13 +2,10 @@ package com.marko.htec.interviewapp.data.post
 
 import android.content.SharedPreferences
 import com.marko.htec.interviewapp.util.logMessage
-import com.marko.htec.interviewapp.util.shouldRefresh
+import com.marko.htec.interviewapp.util.shouldRefreshPosts
 import com.marko.htec.interviewapp.util.updateCacheTime
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.firstOrNull
 import javax.inject.Inject
 
 
@@ -21,29 +18,53 @@ class PostsRepository @Inject constructor(
     private val pref: SharedPreferences,
 ) {
 
-    fun getPosts(forceUpdate: Boolean): Flow<List<Post>>{
-        refreshPostsAsync(forceUpdate)
-        return postDao.getPosts()
+    /** post */
+    suspend fun getPost(postId:Int, forceUpdate: Boolean = false): Flow<Post?>{
+        val flow : Flow<Post?> = postDao.getPost(postId)
+
+        if(forceUpdate || flow.firstOrNull() == null)
+            refreshPost(postId)
+
+        return flow
     }
 
-    private val ioScope by lazy { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
-    fun refreshPostsAsync(forceUpdate: Boolean){
-        ioScope.launch {
-            refreshPosts(forceUpdate)
+    private suspend fun refreshPost(id:Int) {
+        try {
+            val response = postsService.getPostResponse(id)
+            if(response.isSuccessful){
+                logMessage("refreshPost().Successful.id: $id")
+                response.body()?.let { postDao.insert(it) }
+            }else{
+                logMessage("refreshPost().Error: ${response.code()}")
+            }
+        }catch (e : Exception){
+            e.printStackTrace()
         }
     }
 
-    private suspend fun refreshPosts(forceUpdate: Boolean) {
-        if (forceUpdate || shouldRefresh(pref)) {
 
-            updateCacheTime(pref)
-            val response = postsService.getPostResponse()
+
+    /** posts */
+    suspend fun getPosts(): Flow<List<Post>?>{
+
+        if (shouldRefreshPosts(pref))
+            refreshPosts()
+
+        return postDao.getPosts()
+    }
+
+    suspend fun refreshPosts() {
+        try {
+            val response = postsService.getPostsResponse()
             if(response.isSuccessful){
                 logMessage("refreshPosts().Successful")
-                postDao.insertAll(response.body())
+                response.body()?.let { postDao.insertAll(it) }
+                updateCacheTime(pref)
             }else{
                 logMessage("refreshPosts().Error: ${response.code()}")
             }
+        }catch (e : Exception){
+            e.printStackTrace()
         }
     }
 

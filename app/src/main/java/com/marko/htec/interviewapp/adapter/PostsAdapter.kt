@@ -2,9 +2,11 @@ package com.marko.htec.interviewapp.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.marko.htec.interviewapp.data.post.Post
 import com.marko.htec.interviewapp.databinding.RowPostBinding
+import com.marko.htec.interviewapp.ui.posts.PostsFragmentDirections
 
 /**
  * @author Created by Marko Mihajlovic on 28.8.2021.
@@ -30,7 +32,10 @@ class PostsAdapter : RecyclerView.Adapter<PostsAdapter.RowPost>() {
 
         binding.titleTxt.text = post.title
         binding.bodyTxt.text = post.body
-        binding.root.setOnClickListener {  }
+        binding.root.setOnClickListener {
+            val action = PostsFragmentDirections.actionPostsToDetails(post.id, post.userId)
+            try{ it.findNavController().navigate(action) }catch (e:Exception){e.printStackTrace()}
+        }
     }
 
 

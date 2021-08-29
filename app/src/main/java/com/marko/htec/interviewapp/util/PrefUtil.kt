@@ -18,8 +18,12 @@ fun updateCacheTime(pref : SharedPreferences){
     pref.edit().putLong(timeWhenCached, System.currentTimeMillis()).apply()
 }
 
-fun shouldRefresh(pref : SharedPreferences): Boolean {
+fun shouldRefreshPosts(pref : SharedPreferences): Boolean {
     val timeWhenCached = pref.getLong(timeWhenCached, 0)
-    val time: Long = System.currentTimeMillis() - timeWhenCached
-    return time > CACHE_TIMEOUT
+    return shouldRefreshPosts(timeWhenCached, System.currentTimeMillis())
+}
+
+fun shouldRefreshPosts(timeWhenCached : Long, curTime : Long): Boolean {
+    val time: Long = curTime - timeWhenCached
+    return time >= CACHE_TIMEOUT
 }

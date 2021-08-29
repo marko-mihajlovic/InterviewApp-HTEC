@@ -16,7 +16,7 @@ class FetchUserTest {
 
     @Test
     fun fetchExistingUserA() = runBlocking{
-        val user = userService.getUser(2).body()
+        val user = userService.getUserResponse(2).body()
         assertNotNull(user)
 
         println("user: $user")
@@ -24,7 +24,7 @@ class FetchUserTest {
 
     @Test
     fun fetchExistingUserB() = runBlocking{
-        val user = userService.getUser(5).body()
+        val user = userService.getUserResponse(5).body()
         assertNotNull(user)
 
         println("user: $user")
@@ -32,7 +32,7 @@ class FetchUserTest {
 
     @Test
     fun fetchNonExistingUser() = runBlocking{
-        val user = userService.getUser(-2).body()
+        val user = userService.getUserResponse(-2).body()
         assertNull(user)
 
         println("NonExistingUser: $user")

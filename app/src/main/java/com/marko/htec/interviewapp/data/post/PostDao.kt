@@ -1,6 +1,9 @@
 package com.marko.htec.interviewapp.data.post
 
-import androidx.room.*
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -9,18 +12,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PostDao {
 
-    @Transaction
     @Query("SELECT * FROM posts")
     fun getPosts(): Flow<List<Post>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(post: List<Post>): List<Long>
+
 
     @Query("SELECT * FROM posts WHERE id = :postId LIMIT 1")
     fun getPost(postId : Int): Flow<Post>
 
- /*   @Transaction
-    @Query("SELECT * FROM posts")
-    fun getPostsAndUsers(): Flow<List<PostAndUser>>*/
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(post: List<Post>?): List<Long>
+    suspend fun insert(post: Post): Long
 
 }

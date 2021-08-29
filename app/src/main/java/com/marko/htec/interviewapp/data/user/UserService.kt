@@ -10,6 +10,6 @@ import retrofit2.http.Path
 interface UserService {
 
     @GET("users/{id}")
-    suspend fun getUser(@Path("id") id:Int): Response<User>
+    suspend fun getUserResponse(@Path("id") id:Int): Response<User>
 
 }

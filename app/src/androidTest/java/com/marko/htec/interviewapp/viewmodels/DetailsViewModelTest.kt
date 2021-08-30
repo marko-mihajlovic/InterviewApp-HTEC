@@ -2,6 +2,7 @@ package com.marko.htec.interviewapp.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.asFlow
 import androidx.room.Room
 import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.platform.app.InstrumentationRegistry
@@ -15,6 +16,9 @@ import com.marko.htec.interviewapp.util.runBlockingTest
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.takeWhile
+import kotlinx.coroutines.runBlocking
 import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
@@ -82,5 +86,21 @@ class DetailsViewModelTest {
         assertThat(getValue(viewModel.user)!!.id, equalTo(userId))
     }
 
+    @Test
+    fun testDeletingPost() = runBlocking {
+        val flow = viewModel.post.asFlow()
+
+        var hasDeleted = false
+        flow.takeWhile { it == null && hasDeleted }.collect {
+            if(hasDeleted){
+                assertThat(it, equalTo(null))
+            }
+
+            if(it!=null){
+                viewModel.deletePost()
+                hasDeleted = true
+            }
+        }
+    }
 
 }

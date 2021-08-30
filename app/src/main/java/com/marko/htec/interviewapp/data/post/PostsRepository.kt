@@ -18,6 +18,11 @@ class PostsRepository @Inject constructor(
     private val pref: SharedPreferences,
 ) {
 
+    suspend fun deletePost(post: Post){
+        postDao.delete(post)
+    }
+
+
     /** post */
     suspend fun getPost(postId:Int, forceUpdate: Boolean = false): Flow<Post?>{
         val flow : Flow<Post?> = postDao.getPost(postId)

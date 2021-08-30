@@ -1,11 +1,11 @@
 package com.marko.htec.interviewapp.ui.details
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.marko.htec.interviewapp.R
 import com.marko.htec.interviewapp.databinding.FragmentDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,7 +28,6 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         confViewModel()
-
     }
 
     private fun confViewModel(){
@@ -38,9 +37,39 @@ class DetailsFragment : Fragment() {
         })
 
         viewModel.post.observe(viewLifecycleOwner, {
+            setHasOptionsMenu(viewModel.post.value!=null)
+
             binding.titleTxt.text = it?.title
             binding.bodyTxt.text = it?.body
         })
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.details_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.delete -> askToDelete()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun askToDelete() {
+        if(viewModel.post.value==null)
+            return
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("Delete post?")
+            .setMessage(viewModel.post.value?.title)
+            .setPositiveButton("Delete") { dialog, _ ->
+                viewModel.deletePost()
+                dialog.cancel()
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+            .show()
+    }
 }

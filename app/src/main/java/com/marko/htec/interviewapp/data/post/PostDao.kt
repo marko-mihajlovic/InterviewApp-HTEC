@@ -1,9 +1,6 @@
 package com.marko.htec.interviewapp.data.post
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -25,4 +22,7 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(post: Post): Long
 
+
+    @Delete
+    suspend fun delete(post: Post): Int
 }

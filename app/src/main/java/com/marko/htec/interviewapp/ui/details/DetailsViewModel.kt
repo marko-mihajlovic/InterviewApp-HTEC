@@ -52,4 +52,10 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+    fun deletePost(){
+        viewModelScope.launch {
+            post.value?.let { postsRepository.deletePost(it) }
+        }
+    }
+
 }

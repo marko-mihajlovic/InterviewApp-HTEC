@@ -18,7 +18,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * @author Created by Marko Mihajlovic on 28.8.2021.
+ * @author Created by Marko Mihajlovic on 30.8.2021.
  */
 @RunWith(AndroidJUnit4::class)
 class DeletePostDaoTest {

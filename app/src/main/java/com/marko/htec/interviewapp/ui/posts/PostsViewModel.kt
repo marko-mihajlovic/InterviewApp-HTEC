@@ -20,6 +20,8 @@ class PostsViewModel @Inject constructor(
 
 
     val postList = MutableLiveData<List<Post>?>()
+    val toastMsg = repository.toastMsg
+    val isRefreshing = repository.isRefreshing
 
     init { loadPosts() }
 

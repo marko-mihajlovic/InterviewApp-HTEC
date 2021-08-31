@@ -4,11 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/drawable/ic_delete.xml" value="0.3351851851851852" />
+        <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/drawable/ic_launcher_foreground.xml" value="0.3333333333333333" />
         <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/layout/activity_main.xml" value="0.35208333333333336" />
         <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/layout/fragment_details.xml" value="0.22" />
         <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/layout/fragment_posts.xml" value="0.33" />
         <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/layout/row_post.xml" value="0.3149113660062565" />
         <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/menu/details_menu.xml" value="0.35208333333333336" />
+        <entry key="..\:/MARKOPROJECTS/AndroidProjects/HtecInterview/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3333333333333333" />
       </map>
     </option>
   </component>

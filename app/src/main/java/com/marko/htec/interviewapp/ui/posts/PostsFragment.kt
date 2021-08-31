@@ -6,8 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.marko.htec.interviewapp.R
 import com.marko.htec.interviewapp.adapter.PostsAdapter
 import com.marko.htec.interviewapp.databinding.FragmentPostsBinding
+import com.marko.htec.interviewapp.util.confStyle
+import com.marko.htec.interviewapp.util.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,19 +26,24 @@ class PostsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentPostsBinding.inflate(layoutInflater, container, false)
+        confStyle(activity, false, R.string.android_task)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        confListAndAdapter()
+        confUI()
         confViewModel()
 
     }
 
-    private fun confListAndAdapter() {
+    private fun confUI() {
         binding.listView.adapter = postsAdapter
+
+        binding.refreshListLayout.setOnRefreshListener {
+            viewModel.refresh()
+        }
     }
 
     private fun confViewModel() {
@@ -43,10 +51,17 @@ class PostsFragment : Fragment() {
             postsAdapter.updateList(it)
         })
 
-        binding.refreshListLayout.setOnRefreshListener {
-            viewModel.refresh()
-            binding.refreshListLayout.isRefreshing = false
-        }
+        viewModel.toastMsg.value = ""
+        viewModel.toastMsg.observe(viewLifecycleOwner, {
+            showToast(context, it)
+        })
+
+        viewModel.isRefreshing.value = false
+        viewModel.isRefreshing.observe(viewLifecycleOwner, {
+            binding.refreshListLayout.post {
+                binding.refreshListLayout.isRefreshing = it
+            }
+        })
     }
 
 

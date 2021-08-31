@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.marko.htec.interviewapp.R
 import com.marko.htec.interviewapp.databinding.FragmentDetailsBinding
+import com.marko.htec.interviewapp.util.confStyle
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -21,6 +22,7 @@ class DetailsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentDetailsBinding.inflate(layoutInflater, container, false)
+        confStyle(activity, true, R.string.post_details)
         return binding.root
     }
 
@@ -52,6 +54,7 @@ class DetailsFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.delete -> askToDelete()
+            android.R.id.home -> activity?.onBackPressed()
         }
         return super.onOptionsItemSelected(item)
     }

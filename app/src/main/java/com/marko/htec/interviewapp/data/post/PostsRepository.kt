@@ -1,6 +1,7 @@
 package com.marko.htec.interviewapp.data.post
 
 import android.content.SharedPreferences
+import androidx.lifecycle.MutableLiveData
 import com.marko.htec.interviewapp.util.logMessage
 import com.marko.htec.interviewapp.util.shouldRefreshPosts
 import com.marko.htec.interviewapp.util.updateCacheTime
@@ -18,10 +19,12 @@ class PostsRepository @Inject constructor(
     private val pref: SharedPreferences,
 ) {
 
+    val toastMsg = MutableLiveData<String?>()
+    val isRefreshing = MutableLiveData(false)
+
     suspend fun deletePost(post: Post){
         postDao.delete(post)
     }
-
 
     /** post */
     suspend fun getPost(postId:Int, forceUpdate: Boolean = false): Flow<Post?>{
@@ -51,6 +54,8 @@ class PostsRepository @Inject constructor(
 
     /** posts */
     suspend fun getPosts(): Flow<List<Post>?>{
+        toastMsg.postValue(null)
+        isRefreshing.postValue(false)
 
         if (shouldRefreshPosts(pref))
             refreshPosts()
@@ -59,6 +64,7 @@ class PostsRepository @Inject constructor(
     }
 
     suspend fun refreshPosts() {
+        isRefreshing.postValue(true)
         try {
             val response = postsService.getPostsResponse()
             if(response.isSuccessful){
@@ -67,9 +73,13 @@ class PostsRepository @Inject constructor(
                 updateCacheTime(pref)
             }else{
                 logMessage("refreshPosts().Error: ${response.code()}")
+                toastMsg.postValue("Couldn't refresh posts")
             }
         }catch (e : Exception){
             e.printStackTrace()
+            toastMsg.postValue("Couldn't refresh posts")
+        }finally {
+            isRefreshing.postValue(false)
         }
     }
 

@@ -10,9 +10,7 @@ import com.marko.htec.interviewapp.data.AppDatabase
 import com.marko.htec.interviewapp.data.post.PostsRepository
 import com.marko.htec.interviewapp.data.user.UserRepository
 import com.marko.htec.interviewapp.ui.details.DetailsViewModel
-import com.marko.htec.interviewapp.util.MainCoroutineRule
-import com.marko.htec.interviewapp.util.getValue
-import com.marko.htec.interviewapp.util.runBlockingTest
+import com.marko.htec.interviewapp.util.*
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -54,9 +52,6 @@ class DetailsViewModelTest {
     lateinit var userRepository: UserRepository
 
 
-    private val postId: Int = 16
-    private val userId: Int = 9
-
     @Before
     fun setUp() {
         hiltRule.inject()
@@ -65,8 +60,8 @@ class DetailsViewModelTest {
         appDatabase = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
 
         val savedStateHandle: SavedStateHandle = SavedStateHandle().apply {
-            set("postId", postId)
-            set("userId", userId)
+            set("postId", testPost.id)
+            set("userId", testUser.id)
         }
         viewModel = DetailsViewModel(savedStateHandle, postsRepository, userRepository)
     }
@@ -78,12 +73,12 @@ class DetailsViewModelTest {
 
     @Test
     fun testPostVM() = coroutineRule.runBlockingTest {
-        assertThat(getValue(viewModel.post)!!.id, equalTo(postId))
+        assertThat(getValue(viewModel.post)!!.id, equalTo(testPost.id))
     }
 
     @Test
     fun testUserVM() = coroutineRule.runBlockingTest {
-        assertThat(getValue(viewModel.user)!!.id, equalTo(userId))
+        assertThat(getValue(viewModel.user)!!.id, equalTo(testUser.id))
     }
 
     @Test
